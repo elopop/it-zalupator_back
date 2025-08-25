@@ -11,4 +11,7 @@ const PORT = process.env.PORT || 5001;
 // запуск приложения
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
+  console.log(`API:        http://localhost:${PORT}/api`);
+  console.log(`Swagger UI: http://localhost:${PORT}/api-docs`);
+  console.log(`OpenAPI:    http://localhost:${PORT}/openapi.json`);
 });

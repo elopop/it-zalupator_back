@@ -1,0 +1,92 @@
+paths:
+  /videos:
+    get:
+      tags: [videos]
+      summary: Returns all videos
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Video'
+
+    post:
+      tags: [videos]
+      summary: Create new video
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoInputModel'
+      responses:
+        '201':
+          description: Returns the newly created video
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        '400':
+          description: If the inputModel has incorrect values
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIErrorResult'
+
+  /videos/{id}:
+    get:
+      tags: [videos]
+      summary: Return video by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer, format: int32 }
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        '404':
+          description: If video for passed id doesn't exist
+
+    put:
+      tags: [videos]
+      summary: Update existing video by id with InputModel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer, format: int32 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateVideoInputModel'
+      responses:
+        '204': { description: No Content }
+        '400':
+          description: If the inputModel has incorrect values
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIErrorResult'
+        '404': { description: Not Found }
+
+    delete:
+      tags: [videos]
+      summary: Delete video specified by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer, format: int32 }
+      responses:
+        '204': { description: No Content }
+        '404': { description: Not Found }

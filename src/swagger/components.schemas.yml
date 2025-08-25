@@ -1,0 +1,126 @@
+components:
+  schemas:
+
+    APIErrorResult:
+      type: object
+      required: [errorsMessages]
+      properties:
+        errorsMessages:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/FieldError'
+
+    FieldError:
+      type: object
+      required: [message, field]
+      properties:
+        message:
+          type: string
+          nullable: true
+          description: Message with error explanation for certain field
+        field:
+          type: string
+          nullable: true
+          description: What field/property of input model has error
+
+    Resolutions:
+      type: string
+      enum: [P144, P240, P360, P480, P720, P1080, P1440, P2160]
+
+    CreateVideoInputModel:
+      type: object
+      required: [title, author, availableResolutions]
+      properties:
+        title:
+          type: string
+          maxLength: 40
+        author:
+          type: string
+          maxLength: 20
+        availableResolutions:
+          type: array
+          description: At least one resolution should be added
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Resolutions'
+
+    UpdateVideoInputModel:
+      type: object
+      required:
+        - title
+        - author
+        - availableResolutions
+        - canBeDownloaded
+        - minAgeRestriction
+        - publicationDate
+      properties:
+        title:
+          type: string
+          maxLength: 40
+        author:
+          type: string
+          maxLength: 20
+        availableResolutions:
+          type: array
+          description: At least one resolution should be added
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Resolutions'
+        canBeDownloaded:
+          type: boolean
+        minAgeRestriction:
+          oneOf:
+            - type: integer
+              format: int32
+              minimum: 1
+              maximum: 18
+            - type: 'null'
+              description: null - no restriction
+        publicationDate:
+          type: string
+          format: date-time
+
+    Video:
+      type: object
+      required:
+        - id
+        - title
+        - author
+        - canBeDownloaded
+        - minAgeRestriction
+        - createdAt
+        - publicationDate
+        - availableResolutions
+      properties:
+        id:
+          type: integer
+          format: int32
+        title:
+          type: string
+        author:
+          type: string
+        canBeDownloaded:
+          type: boolean
+          description: By default - false
+        minAgeRestriction:
+          oneOf:
+            - type: integer
+              format: int32
+              minimum: 1
+              maximum: 18
+              description:
+              default: null
+            - type: 'null'
+              description: null - no restriction
+        createdAt:
+          type: string
+          format: date-time
+        publicationDate:
+          type: string
+          format: date-time
+          description: By default - +1 day from CreatedAt
+        availableResolutions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resolutions'
