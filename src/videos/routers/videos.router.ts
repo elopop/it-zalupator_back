@@ -5,10 +5,6 @@ import {badRequest, isoNow, plusDaysISO, validateCreate, validateUpdate} from ".
 import {Video} from "../types/videos";
 
 export const videosRouter: Router = Router()
-
-
-
-
 // роут с videos
 videosRouter
     .get('/', function (_req: Request, res: Response) {
@@ -47,7 +43,7 @@ videosRouter
             return v.id === id;
         });
         if (!video) {
-            return res.status(HttpStatus.NotFound);
+            return res.sendStatus(HttpStatus.NotFound); // для тестов важно прописать sendStatus
         }
         return res.status(HttpStatus.OK).send(video);
     })
@@ -57,7 +53,7 @@ videosRouter
         const video = db.videos.find(v => v.id === id);
 
         if (!video) {
-            return res.sendStatus(HttpStatus.BadRequest)
+            return res.sendStatus(HttpStatus.NotFound)
         }
 
         const errors = validateUpdate(req.body);
@@ -77,8 +73,8 @@ videosRouter
     })
 
     .delete('/:id', function (req: Request, res: Response) {
-        const id = Number(req.params.id);
-        const index = db.videos.findIndex(function (v) { return v.id === id; });
+        let id = Number(req.params.id);
+        let index = db.videos.findIndex(function (v) { return v.id === id; });
 
         if (index === -1) {
             return res.sendStatus(HttpStatus.NotFound);

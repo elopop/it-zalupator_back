@@ -61,11 +61,11 @@ export function validateCreate(body: any): FieldError[] {
     }
     // Проверка author (строка не пустая и меньше 20 символов)
     if (typeof body.author !== 'string' || body.author.trim().length === 0 || body.author.length > 20) {
-        errors.push({field: 'title', message: 'Author must be <= 20 chars'})
+        errors.push({field: 'author', message: 'Author must be <= 20 chars'})
     }
     //проверка availableResolutions
     if (!sanitizeResolutions(body.availableResolutions)) {
-        errors.push(({field: 'title', message: 'At least one valid resolution required'}))
+        errors.push(({field: 'availableResolutions', message: 'At least one valid resolution required'}))
     }
     return errors;
 }
